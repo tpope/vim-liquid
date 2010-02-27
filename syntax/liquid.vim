@@ -43,6 +43,30 @@ if exists('b:liquid_subtype') && b:liquid_subtype != 'yaml'
   syn region liquidYamlHead start="\%^---$" end="^---\s*$" keepend contains=@liquidYamlTop,@Spell
 endif
 
+if !exists('g:liquid_highlight_types')
+  let g:liquid_highlight_types = []
+endif
+
+if !exists('s:subtype')
+  let s:subtype = exists('b:liquid_subtype') ? b:liquid_subtype : ''
+
+  for s:type in map(copy(g:liquid_highlight_types),'matchstr(v:val,"[^=]*$")')
+    if s:type =~ '\.'
+      let b:{matchstr(s:type,'[^.]*')}_subtype = matchstr(s:type,'\.\zs.*')
+    endif
+    exe 'syn include @liquidHighlight'.substitute(s:type,'\.','','g').' syntax/'.matchstr(s:type,'[^.]*').'.vim'
+    unlet! b:current_syntax
+  endfor
+  unlet! s:type
+
+  if s:subtype == ''
+    unlet! b:liquid_subtype
+  else
+    let b:liquid_subtype = s:subtype
+  endif
+  unlet s:subtype
+endif
+
 syn region  liquidStatement  matchgroup=liquidDelimiter start="{%" end="%}" contains=@liquidStatement containedin=ALLBUT,@liquidExempt keepend
 syn region  liquidExpression matchgroup=liquidDelimiter start="{{" end="}}" contains=@liquidExpression  containedin=ALLBUT,@liquidExempt keepend
 syn region  liquidComment    matchgroup=liquidDelimiter start="{%\s*comment\s*%}" end="{%\s*endcomment\s*%}" contains=liquidTodo,@Spell containedin=ALLBUT,@liquidExempt keepend
@@ -50,6 +74,16 @@ syn region  liquidComment    matchgroup=liquidDelimiter start="{%\s*comment\s*%}
 syn cluster liquidExempt contains=liquidStatement,liquidExpression,liquidComment,@liquidStatement,liquidYamlHead
 syn cluster liquidStatement contains=liquidConditional,liquidRepeat,liquidKeyword,@liquidExpression
 syn cluster liquidExpression contains=liquidOperator,liquidString,liquidNumber,liquidFloat,liquidBoolean,liquidNull,liquidEmpty,liquidPipe,liquidForloop
+
+syn keyword liquidKeyword highlight nextgroup=liquidTypeHighlight skipwhite contained
+syn keyword liquidKeyword endhighlight contained
+syn region liquidHighlight start="{%\s*highlight\s\+\w\+\s*%}" end="{% endhighlight %}" keepend
+
+for s:type in g:liquid_highlight_types
+  exe 'syn match liquidTypeHighlight "\<'.matchstr(s:type,'[^=]*').'\>" contained'
+  exe 'syn region liquidHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' start="{%\s*highlight\s\+'.matchstr(s:type,'[^=]*').'\s*%}" end="{% endhighlight %}" keepend contains=@liquidHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\.','','g')
+endfor
+unlet! s:type
 
 syn region liquidString matchgroup=liquidQuote start=+"+ end=+"+ contained
 syn region liquidString matchgroup=liquidQuote start=+'+ end=+'+ contained
@@ -79,6 +113,7 @@ syn keyword liquidTablerowloopAttribute length index index0 col col0 index0 rind
 
 hi def link liquidDelimiter             PreProc
 hi def link liquidComment               Comment
+hi def link liquidTypeHighlight         Type
 hi def link liquidConditional           Conditional
 hi def link liquidRepeat                Repeat
 hi def link liquidKeyword               Keyword
