@@ -36,6 +36,13 @@ endif
 
 syn case match
 
+if exists('b:liquid_subtype') && b:liquid_subtype != 'yaml'
+  " YAML Front Matter
+  syn include @liquidYamlTop syntax/yaml.vim
+  unlet! b:current_syntax
+  syn region liquidYamlHead start="\%^---$" end="^---\s*$" keepend contains=@liquidYamlTop,@Spell
+endif
+
 syn region  liquidStatement  matchgroup=liquidDelimiter start="{%" end="%}" contains=@liquidStatement containedin=ALLBUT,@liquidExempt keepend
 syn region  liquidExpression matchgroup=liquidDelimiter start="{{" end="}}" contains=@liquidExpression  containedin=ALLBUT,@liquidExempt keepend
 syn region  liquidComment    matchgroup=liquidDelimiter start="{%\s*comment\s*%}" end="{%\s*endcomment\s*%}" contains=liquidTodo,@Spell containedin=ALLBUT,@liquidExempt keepend
