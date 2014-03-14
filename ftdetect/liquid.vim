@@ -9,3 +9,8 @@ au BufNewFile,BufRead *.markdown,*.mkd,*.mkdn,*.md
       \   let b:liquid_subtype = 'markdown' |
       \   set ft=liquid |
       \ endif
+au BufNewFile,BufRead *.textile
+      \ if getline(1) == '---' |
+      \   let b:liquid_subtype = 'textile' |
+      \   set ft=liquid |
+      \ endif
