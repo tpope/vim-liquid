@@ -34,6 +34,18 @@ if exists('*GetLiquidIndent')
   finish
 endif
 
+" The shiftwidth() exists since patch 7.3.694
+" Don't require it to exist.
+if exists('*shiftwidth')
+  function s:sw() abort
+    return shiftwidth()
+  endfunction
+else
+  function s:sw() abort
+    return &shiftwidth
+  endfunction
+endif
+
 function! s:count(string,pattern)
   let string = substitute(a:string,'\C'.a:pattern,"\n",'g')
   return strlen(substitute(string,"[^\n]",'','g'))
@@ -54,9 +66,9 @@ function! GetLiquidIndent(...)
   let line  = substitute(line,'\C^\%(\s*{%\s*end\w*\s*%}\)\+','','')
   let line .= matchstr(cline,'\C^\%(\s*{%\s*end\w*\s*%}\)\+')
   let cline = substitute(cline,'\C^\%(\s*{%\s*end\w*\s*%}\)\+','','')
-  let ind += shiftwidth() * s:count(line,'{%\s*\%(if\|elsif\|else\|unless\|ifchanged\|case\|when\|for\|empty\|tablerow\|capture\)\>')
-  let ind -= shiftwidth() * s:count(line,'{%\s*end\%(if\|unless\|ifchanged\|case\|for\|tablerow\|capture\)\>')
-  let ind -= shiftwidth() * s:count(cline,'{%\s*\%(elsif\|else\|when\|empty\)\>')
-  let ind -= shiftwidth() * s:count(cline,'{%\s*end\w*$')
+  let ind += s:sw() * s:count(line,'{%\s*\%(if\|elsif\|else\|unless\|ifchanged\|case\|when\|for\|empty\|tablerow\|capture\)\>')
+  let ind -= s:sw() * s:count(line,'{%\s*end\%(if\|unless\|ifchanged\|case\|for\|tablerow\|capture\)\>')
+  let ind -= s:sw() * s:count(cline,'{%\s*\%(elsif\|else\|when\|empty\)\>')
+  let ind -= s:sw() * s:count(cline,'{%\s*end\w*$')
   return ind
 endfunction
