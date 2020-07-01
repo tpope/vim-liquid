@@ -68,10 +68,10 @@ if !exists('s:subtype')
   unlet s:subtype
 endif
 
-syn region  liquidStatement  matchgroup=liquidDelimiter start="{%" end="%}" contains=@liquidStatement containedin=ALLBUT,@liquidExempt keepend
-syn region  liquidExpression matchgroup=liquidDelimiter start="{{" end="}}" contains=@liquidExpression  containedin=ALLBUT,@liquidExempt keepend
-syn region  liquidComment    matchgroup=liquidDelimiter start="{%\s*comment\s*%}" end="{%\s*endcomment\s*%}" contains=liquidTodo,@Spell containedin=ALLBUT,@liquidExempt keepend
-syn region  liquidRaw        matchgroup=liquidDelimiter start="{%\s*raw\s*%}" end="{%\s*endraw\s*%}" contains=TOP,@liquidExempt containedin=ALLBUT,@liquidExempt keepend
+syn region  liquidStatement  matchgroup=liquidDelimiter start="{%-\=" end="-\=%}" contains=@liquidStatement containedin=ALLBUT,@liquidExempt keepend
+syn region  liquidExpression matchgroup=liquidDelimiter start="{{-\=" end="-\=}}" contains=@liquidExpression  containedin=ALLBUT,@liquidExempt keepend
+syn region  liquidComment    matchgroup=liquidDelimiter start="{%-\=\s*comment\s*-\=%}" end="{%-\=\s*endcomment\s*-\=%}" contains=liquidTodo,@Spell containedin=ALLBUT,@liquidExempt keepend
+syn region  liquidRaw        matchgroup=liquidDelimiter start="{%-\=\s*raw\s*-\=%}" end="{%-\=\s*endraw\s*-\=%}" contains=TOP,@liquidExempt containedin=ALLBUT,@liquidExempt keepend
 
 syn cluster liquidExempt contains=liquidStatement,liquidExpression,liquidComment,liquidRaw,@liquidStatement,liquidYamlHead
 syn cluster liquidStatement contains=liquidConditional,liquidRepeat,liquidKeyword,@liquidExpression
@@ -79,11 +79,11 @@ syn cluster liquidExpression contains=liquidOperator,liquidString,liquidNumber,l
 
 syn keyword liquidKeyword highlight nextgroup=liquidTypeHighlight skipwhite contained
 syn keyword liquidKeyword endhighlight contained
-syn region liquidHighlight start="{%\s*highlight\s\+\w\+\s*%}" end="{% endhighlight %}" keepend
+syn region liquidHighlight start="{%-\=\s*highlight\s\+\w\+\s*-\=%}" end="{%-\= endhighlight -\=%}" keepend
 
 for s:type in g:liquid_highlight_types
   exe 'syn match liquidTypeHighlight "\<'.matchstr(s:type,'[^=]*').'\>" contained'
-  exe 'syn region liquidHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' start="{%\s*highlight\s\+'.matchstr(s:type,'[^=]*').'\s*%}" end="{% endhighlight %}" keepend contains=@liquidHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\.','','g')
+  exe 'syn region liquidHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' start="{%-\=\s*highlight\s\+'.matchstr(s:type,'[^=]*').'\s*-\=%}" end="{%-\= endhighlight -\=%}" keepend contains=@liquidHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\.','','g')
 endfor
 unlet! s:type
 
@@ -102,7 +102,7 @@ syn keyword liquidFilter date capitalize downcase upcase first last join sort si
 
 syn keyword liquidConditional if elsif else endif unless endunless case when endcase ifchanged endifchanged contained
 syn keyword liquidRepeat      for endfor tablerow endtablerow in contained
-syn match   liquidRepeat      "\%({%\s*\)\@<=empty\>" contained
+syn match   liquidRepeat      "\%({%-\=\s*\)\@<=empty\>" contained
 syn keyword liquidKeyword     assign cycle include with contained
 
 syn keyword liquidForloop forloop nextgroup=liquidForloopDot contained
