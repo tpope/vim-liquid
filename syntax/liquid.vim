@@ -68,12 +68,21 @@ if !exists('s:subtype')
   unlet s:subtype
 endif
 
+syn include @liquidJson syntax/json.vim
+syn include @liquidJs   syntax/javascript.vim
+syn include @liquidCss  syntax/css.vim
+
 syn region  liquidStatement  matchgroup=liquidDelimiter start="{%-\=" end="-\=%}" contains=@liquidStatement containedin=ALLBUT,@liquidExempt keepend
 syn region  liquidExpression matchgroup=liquidDelimiter start="{{-\=" end="-\=}}" contains=@liquidExpression  containedin=ALLBUT,@liquidExempt keepend
 syn region  liquidComment    matchgroup=liquidDelimiter start="{%-\=\s*comment\s*-\=%}" end="{%-\=\s*endcomment\s*-\=%}" contains=liquidTodo,@Spell containedin=ALLBUT,@liquidExempt keepend
 syn region  liquidRaw        matchgroup=liquidDelimiter start="{%-\=\s*raw\s*-\=%}" end="{%-\=\s*endraw\s*-\=%}" contains=TOP,@liquidExempt containedin=ALLBUT,@liquidExempt keepend
+syn region  liquidBlock      matchgroup=liquidDelimiter start="{%-\=\s*comment\s*schema\s*-\=%}" end="{%-\=\s*endcomment\s*-\=%}" contains=@liquidJson,@Spell containedin=ALLBUT,@liquidExempt keepend
+syn region  liquidSchema     matchgroup=liquidDelimiter start="{%-\=\s*schema\s*-\=%}" end="{%-\=\s*endschema\s*-\=%}" contains=@liquidJson,@Spell containedin=ALLBUT,@liquidExempt keepend
+syn region  liquidJavascript matchgroup=liquidDelimiter start="{%-\=\s*javascript\s*-\=%}" end="{%-\=\s*endjavascript\s*-\=%}" contains=@liquidJs,@Spell containedin=ALLBUT,@liquidExempt keepend
+syn region  liquidStylesheet matchgroup=liquidDelimiter start="{%-\=\s*stylesheet\s*-\=%}" end="{%-\=\s*endstylesheet\s*-\=%}" contains=@liquidCss,@Spell containedin=ALLBUT,@liquidExempt keepend
+syn region  liquidStyle      matchgroup=liquidDelimiter start="{%-\=\s*style\s*-\=%}" end="{%-\=\s*endstyle\s*-\=%}" contains=@liquidCss,@Spell containedin=ALLBUT,@liquidExempt keepend
 
-syn cluster liquidExempt contains=liquidStatement,liquidExpression,liquidComment,liquidRaw,@liquidStatement,liquidYamlHead
+syn cluster liquidExempt contains=liquidStatement,liquidExpression,liquidComment,liquidRaw,@liquidStatement,liquidYamlHead,@liquidJson,@liquidJs,@liquidCss
 syn cluster liquidStatement contains=liquidConditional,liquidRepeat,liquidKeyword,@liquidExpression
 syn cluster liquidExpression contains=liquidOperator,liquidString,liquidNumber,liquidFloat,liquidBoolean,liquidNull,liquidEmpty,liquidPipe,liquidForloop
 
@@ -92,7 +101,7 @@ syn region liquidString matchgroup=liquidQuote start=+'+ end=+'+ contained
 syn match liquidNumber "-\=\<\d\+\>" contained
 syn match liquidFloat "-\=\<\d\+\>\.\.\@!\%(\d\+\>\)\=" contained
 syn keyword liquidBoolean true false contained
-syn keyword liquidNull null nil contained
+syn keyword liquidNull null nil blank contained
 syn match liquidEmpty "\<empty\>" contained
 
 syn keyword liquidOperator and or not contained
@@ -101,9 +110,9 @@ syn match liquidPipe '|' contained skipwhite nextgroup=liquidFilter
 syn keyword liquidFilter date capitalize downcase upcase first last join sort size strip_html strip_newlines newline_to_br replace replace_first remove remove_first truncate truncatewords prepend append minus plus times divided_by contained
 
 syn keyword liquidConditional if elsif else endif unless endunless case when endcase ifchanged endifchanged contained
-syn keyword liquidRepeat      for endfor tablerow endtablerow in contained
+syn keyword liquidRepeat      for endfor tablerow endtablerow in break continue limit offset reversed contained
 syn match   liquidRepeat      "\%({%-\=\s*\)\@<=empty\>" contained
-syn keyword liquidKeyword     assign cycle include with contained
+syn keyword liquidKeyword     assign capture endcapture increasement decreasement cycle include with layout section render form endform paginate endpaginate contained
 
 syn keyword liquidForloop forloop nextgroup=liquidForloopDot contained
 syn match liquidForloopDot "\." nextgroup=liquidForloopAttribute contained
