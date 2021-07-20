@@ -105,14 +105,16 @@ syn keyword liquidNull null nil blank contained
 syn match liquidEmpty "\<empty\>" contained
 
 syn keyword liquidOperator and or not contained
-syn match liquidPipe '|' contained skipwhite nextgroup=liquidFilter
+syn match liquidPipe '|' contained skipwhite nextgroup=liquidFilter,shopifyFilter
 
-syn keyword liquidFilter date capitalize downcase upcase first last join sort size strip_html strip_newlines newline_to_br replace replace_first remove remove_first truncate truncatewords prepend append minus plus times divided_by contained
+syn keyword liquidFilter      date capitalize downcase upcase escape escape_once first last join sort size where uniq strip_html strip_newlines newline_to_br replace replace_first remove remove_first slice split strip truncate truncatewords prepend append url_encode url_decode abs at_most at_least ceil divided_by floor minus plus round times modulo contained
+syn keyword shopifyFilter     color_to_rgb color_to_hsl color_to_hex color_extract color_brightness color_modify color_lighten color_darken color_saturate color_desaturate color_mix color_contrast color_difference brightness_difference font_modify font_face font_url img_tag payment_button payment_terms script_tag stylesheet_tag time_tag payment_type_svg_tag external_video_tag external_video_url img_tag img_url media_tag model_viewer_tag video_tag metafield_tag metafield_text money money_with_currency money_without_trailing_zeros money_without_currency camelcase handleize md5 sha1 sha256 pluralize lstrip rstrip url_escape url_param_escape asset_url asset_img_url file_url file_img_url customer_login_link global_asset_url link_to link_to_vendor link_to_type link_to_tag link_to_add_tag link_to_remove_tag payment_type_img_url shopify_asset_url sort_by url_for_type url_for_vendor within default_errors default_pagination format_address highlight highlight_active_tag json t weight_with_unit placeholder_svg_tag contained
 
 syn keyword liquidConditional if elsif else endif unless endunless case when endcase ifchanged endifchanged contained
 syn keyword liquidRepeat      for endfor tablerow endtablerow in break continue limit offset reversed contained
 syn match   liquidRepeat      "\%({%-\=\s*\)\@<=empty\>" contained
-syn keyword liquidKeyword     assign capture endcapture increasement decreasement cycle include with layout section render form endform paginate endpaginate contained
+syn keyword liquidKeyword     assign capture endcapture increasement decreasement cycle include with render contained
+syn keyword shopifyKeyword    layout section form endform paginate endpaginate contained
 
 syn keyword liquidForloop forloop nextgroup=liquidForloopDot contained
 syn match liquidForloopDot "\." nextgroup=liquidForloopAttribute contained
@@ -128,6 +130,7 @@ hi def link liquidTypeHighlight         Type
 hi def link liquidConditional           Conditional
 hi def link liquidRepeat                Repeat
 hi def link liquidKeyword               Keyword
+hi def link shopifyKeyword              Keyword
 hi def link liquidOperator              Operator
 hi def link liquidString                String
 hi def link liquidQuote                 Delimiter
@@ -137,6 +140,7 @@ hi def link liquidEmpty                 liquidNull
 hi def link liquidNull                  liquidBoolean
 hi def link liquidBoolean               Boolean
 hi def link liquidFilter                Function
+hi def link shopifyFilter               Function
 hi def link liquidForloop               Identifier
 hi def link liquidForloopAttribute      Identifier
 
