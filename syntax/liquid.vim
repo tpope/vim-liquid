@@ -92,18 +92,18 @@ syn region liquidString matchgroup=liquidQuote start=+'+ end=+'+ contained
 syn match liquidNumber "-\=\<\d\+\>" contained
 syn match liquidFloat "-\=\<\d\+\>\.\.\@!\%(\d\+\>\)\=" contained
 syn keyword liquidBoolean true false contained
-syn keyword liquidNull null nil contained
+syn keyword liquidNull null nil blank contained
 syn match liquidEmpty "\<empty\>" contained
 
 syn keyword liquidOperator and or not contained
 syn match liquidPipe '|' contained skipwhite nextgroup=liquidFilter
 
-syn keyword liquidFilter date capitalize downcase upcase first last join sort size strip_html strip_newlines newline_to_br replace replace_first remove remove_first truncate truncatewords prepend append minus plus times divided_by contained
+syn keyword liquidFilter date capitalize downcase upcase escape escape_once first last join sort size where uniq strip_html strip_newlines newline_to_br replace replace_first remove remove_first slice split strip truncate truncatewords prepend append url_encode url_decode abs at_most at_least ceil divided_by floor minus plus round times modulo contained
 
 syn keyword liquidConditional if elsif else endif unless endunless case when endcase ifchanged endifchanged contained
-syn keyword liquidRepeat      for endfor tablerow endtablerow in contained
+syn keyword liquidRepeat      for endfor tablerow endtablerow in break continue limit offset reversed contained
 syn match   liquidRepeat      "\%({%-\=\s*\)\@<=empty\>" contained
-syn keyword liquidKeyword     assign cycle include with contained
+syn keyword liquidKeyword     assign capture endcapture increasement decreasement cycle include with render contained
 
 syn keyword liquidForloop forloop nextgroup=liquidForloopDot contained
 syn match liquidForloopDot "\." nextgroup=liquidForloopAttribute contained
