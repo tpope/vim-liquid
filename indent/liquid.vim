@@ -29,6 +29,8 @@ let b:did_indent = 1
 setlocal indentexpr=GetLiquidIndent()
 setlocal indentkeys=o,O,*<Return>,<>>,{,},0),0],o,O,!^F,=end,=endif,=endunless,=endifchanged,=endcase,=endfor,=endtablerow,=endcapture,=else,=elsif,=when,=empty
 
+let b:undo_indent = "setl inde< indk<"
+
 " Only define the function once.
 if exists('*GetLiquidIndent')
   finish
