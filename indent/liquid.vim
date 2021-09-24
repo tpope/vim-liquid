@@ -36,12 +36,12 @@ if exists('*GetLiquidIndent')
   finish
 endif
 
-function! s:count(string,pattern)
+function! s:count(string, pattern) abort
   let string = substitute(a:string,'\C'.a:pattern,"\n",'g')
   return strlen(substitute(string,"[^\n]",'','g'))
 endfunction
 
-function! GetLiquidIndent(...)
+function! GetLiquidIndent(...) abort
   if a:0 && a:1 == '.'
     let v:lnum = line('.')
   elseif a:0 && a:1 =~ '^\d'
