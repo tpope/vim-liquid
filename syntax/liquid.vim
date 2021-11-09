@@ -73,6 +73,15 @@ syn region  liquidExpression matchgroup=liquidDelimiter start="{{-\=" end="-\=}}
 syn region  liquidComment    matchgroup=liquidDelimiter start="{%-\=\s*comment\s*-\=%}" end="{%-\=\s*endcomment\s*-\=%}" contains=liquidTodo,@Spell containedin=ALLBUT,@liquidExempt keepend
 syn region  liquidRaw        matchgroup=liquidDelimiter start="{%-\=\s*raw\s*-\=%}" end="{%-\=\s*endraw\s*-\=%}" contains=TOP,@liquidExempt containedin=ALLBUT,@liquidExempt keepend
 
+if exists('b:liquid_subtype') && b:liquid_subtype ==# 'html'
+  syn include @JSON syntax/json.vim
+  unlet! b:current_syntax
+  syn include @CSS syntax/css.vim
+  unlet! b:current_syntax
+  syn region  liquidJson     matchgroup=liquidDelimiter start="{%\s*schema\s*%}" end="{%\s*endschema\s*%}" contains=@JSON keepend
+  syn region  liquidCss      matchgroup=liquidDelimiter start="{%\s*style\s*%}" end="{%\s*endstyle\s*%}" contains=@CSS keepend
+end
+
 syn cluster liquidExempt contains=liquidStatement,liquidExpression,liquidComment,liquidRaw,@liquidStatement,liquidYamlHead
 syn cluster liquidStatement contains=liquidConditional,liquidRepeat,liquidKeyword,@liquidExpression
 syn cluster liquidExpression contains=liquidOperator,liquidString,liquidNumber,liquidFloat,liquidBoolean,liquidNull,liquidEmpty,liquidPipe,liquidForloop
