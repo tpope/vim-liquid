@@ -53,7 +53,7 @@ if has('gui_win32')
 endif
 
 if exists('loaded_matchit')
-  let b:match_words .= '\<\%(if\w*\|unless\|case\)\>:\<\%(elsif\|else\|when\)\>:\<end\%(if\w*\|unless\|case\)\>,\<\%(for\|tablerow\)\>:\%({%\s*\)\@<=empty\>:\<end\%(for\|tablerow\)\>,<\(capture\|comment\|highlight\)\>:\<end\1\>'
+  let b:match_words .= '\<\%(if\w*\|unless\|case\)\>:\<\%(elsif\|else\|when\)\>:\<end\%(if\w*\|unless\|case\)\>,\<\%(for\|tablerow\)\>:\%({%\s*\)\@<=empty\>:\<end\%(for\|tablerow\)\>,\<\(capture\|comment\|highlight\)\>:\<end\1\>'
 endif
 
 setlocal commentstring={%\ comment\ %}%s{%\ endcomment\ %}
