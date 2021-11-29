@@ -11,6 +11,6 @@ au BufNewFile,BufRead *.markdown,*.mkd,*.mkdn,*.md
       \ endif
 
 " Set subtype for Shopify alternate templates
-au BufNewFile,BufRead */templates/**.liquid,*/layout/**.liquid,*/snippets/**.liquid
+au BufNewFile,BufRead */{templates,layout,snippets,sections}/**.liquid
       \ let b:liquid_subtype = 'html' |
       \ set ft=liquid |
